@@ -1,18 +1,13 @@
 package bd.edu.seu.mealmanagementsystem.controller;
 
 import bd.edu.seu.mealmanagementsystem.Model.House;
-import bd.edu.seu.mealmanagementsystem.db.DatabaseConnection;
+import bd.edu.seu.mealmanagementsystem.DAO.DatabaseConnection;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
-import javafx.stage.Stage;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class JoinHouseController {
