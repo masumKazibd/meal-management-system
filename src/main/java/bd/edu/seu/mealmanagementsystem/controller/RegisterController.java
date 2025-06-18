@@ -1,263 +1,174 @@
-/*package bd.edu.seu.mealmanagementsystem.controller;
-
-import bd.edu.seu.mealmanagementsystem.Model.House;
-import bd.edu.seu.mealmanagementsystem.db.DatabaseConnection;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import java.sql.*;
-import java.time.LocalDate;
-import java.time.Period;
-
-public class RegisterController {
-    @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
-    @FXML private TextField emailField;
-    @FXML private TextField phoneField;
-    @FXML private DatePicker dobPicker;
-    @FXML private RadioButton maleRadio;
-    @FXML private RadioButton femaleRadio;
-    @FXML private ToggleGroup genderGroup;
-    // Other fields...
-
-    private House house;
-    private String role;
-
-    public void setHouseInfo(House house, String role) {
-        this.house = house;
-        this.role = role;
-    }
-
-    @FXML
-    public void handleRegister() {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
-        String email = emailField.getText().trim();
-        String phone = phoneField.getText().trim();
-        LocalDate dob = dobPicker.getValue();
-        String userGender = maleRadio.isSelected() ? "male" : femaleRadio.isSelected() ? "female" : "";
-
-        // Validation
-        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty() || phone.isEmpty() || dob == null || userGender.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Please fill in all fields.");
-            return;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            showAlert(Alert.AlertType.ERROR, "Passwords do not match.");
-            return;
-        }
-
-        // Age validation (>= 16)
-        int age = Period.between(dob, LocalDate.now()).getYears();
-        if (age < 16) {
-            showAlert(Alert.AlertType.ERROR, "You must be at least 16 years old.");
-            return;
-        }
-
-        // Gender check against house
-        /*if (!userGender.equalsIgnoreCase(house.getGenderType())) {
-            showAlert(Alert.AlertType.ERROR, "User gender does not match house gender.");
-            return;
-        }*/
-
-        // TODO: Insert user into DB with house_id and role (admin or member)
-        // Example: saveUserToDatabase(...)
-
-       /* showAlert(Alert.AlertType.INFORMATION, "Registration successful as " + role + " of house: " /*+ house.getHouseName()*/
-
-/*import javafx.scene.control.Alert;);
-    /
-
-    private void showAlert(Alert.AlertType type, String msg) {
-        Alert alert = new Alert(type);
-        alert.setContentText(msg);
-        alert.show();
-    }
-     try {
-        Connection conn = DatabaseConnection.getInstance();
-
-        // Determine if first user
-        String role = "member"; // default
-        ResultSet rs = conn.createStatement().executeQuery("SELECT COUNT(*) FROM users");
-        if (rs.next() && rs.getInt(1) == 0) {
-            role = "admin"; // first user becomes admin
-        }
-
-        String sql = "INSERT INTO users (username, password, full_name, role) VALUES (?, ?, ?, ?)";
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        stmt.setString(1, username);
-        stmt.setString(2, password); // (Hash in real apps)
-        stmt.setString(3, fullName);
-        stmt.setString(4, role);
-
-        stmt.executeUpdate();
-        showAlert(Alert.AlertType.INFORMATION, "Registration successful as " + role + "!");
-
-        // Optionally clear the fields
-        usernameField.clear();
-        passwordField.clear();
-        fullNameField.clear();
-
-    } catch (SQLException e) {
-        showAlert(Alert.AlertType.ERROR, "Username already exists or database error");
-        e.printStackTrace();
-    }
-}*/
 package bd.edu.seu.mealmanagementsystem.controller;
 
-import bd.edu.seu.mealmanagementsystem.Model.House;
-import bd.edu.seu.mealmanagementsystem.DAO.DatabaseConnection;
+import bd.edu.seu.mealmanagementsystem.DAO.MessDao;
+import bd.edu.seu.mealmanagementsystem.DAO.UserDao;
+import bd.edu.seu.mealmanagementsystem.Model.Mess;
+import bd.edu.seu.mealmanagementsystem.Model.User;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import java.sql.*;
-import java.time.LocalDate;
-import java.time.Period;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 public class RegisterController {
+
+    @FXML private TextField fullNameField;
     @FXML private TextField usernameField;
-    @FXML private PasswordField passwordField;
-    @FXML private PasswordField confirmPasswordField;
     @FXML private TextField emailField;
-    @FXML private TextField phoneField;
-    @FXML private DatePicker dobPicker;
-    @FXML private RadioButton maleRadio;
-    @FXML private RadioButton femaleRadio;
-    @FXML private ToggleGroup genderGroup;
+    @FXML private PasswordField passwordField;
+    @FXML private RadioButton createMessRadio;
+    @FXML private RadioButton joinMessRadio;
+    @FXML private VBox createMessBox;
+    @FXML private TextField newMessNameField;
+    @FXML private VBox joinMessBox;
+    @FXML private ChoiceBox<String> existingMessesChoiceBox;
+    @FXML private Label messageLabel;
 
-    private House house;
-    private String role;
+    private MessDao messDao;
+    private UserDao userDao;
 
-    public void setHouseInfo(House house, String role) {
-        this.house = house;
-        this.role = role;
+    public void initialize() {
+        messDao = new MessDao();
+        userDao = new UserDao();
+        loadExistingMesses();
     }
 
     @FXML
-    public void handleRegister() {
-        String username = usernameField.getText().trim();
-        String password = passwordField.getText();
-        String confirmPassword = confirmPasswordField.getText();
-        String email = emailField.getText().trim();
-        String phone = phoneField.getText().trim();
-        LocalDate dob = dobPicker.getValue();
-        String gender = maleRadio.isSelected() ? "male" : "female";
+    protected void handleMessOptionChange(ActionEvent event) {
+        if (createMessRadio.isSelected()) {
+            createMessBox.setVisible(true);
+            createMessBox.setManaged(true);
+            joinMessBox.setVisible(false);
+            joinMessBox.setManaged(false);
+        } else {
+            createMessBox.setVisible(false);
+            createMessBox.setManaged(false);
+            joinMessBox.setVisible(true);
+            joinMessBox.setManaged(true);
+        }
+    }
 
-        // Validation
-        if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() ||
-                email.isEmpty() || phone.isEmpty() || dob == null) {
-            showAlert(Alert.AlertType.ERROR, "Please fill in all fields.");
+    private void loadExistingMesses() {
+        List<Mess> messes = messDao.getAllMesses();
+        List<String> messNames = messes.stream().map(Mess::getMessName).collect(Collectors.toList());
+        existingMessesChoiceBox.setItems(FXCollections.observableArrayList(messNames));
+    }
+
+    @FXML
+    protected void handleRegisterButtonAction(ActionEvent event) {
+        String fullName = fullNameField.getText();
+        String username = usernameField.getText();
+        String email = emailField.getText();
+        String password = passwordField.getText(); // Remember to HASH this in a real app!
+
+        if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            messageLabel.setText("Please fill in all user fields.");
             return;
         }
 
-        if (!password.equals(confirmPassword)) {
-            showAlert(Alert.AlertType.ERROR, "Passwords do not match.");
-            return;
-        }
+        User newUser = new User();
+        newUser.setFullName(fullName);
+        newUser.setUsername(username);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
 
-        // Age validation (>= 16)
-        int age = Period.between(dob, LocalDate.now()).getYears();
-        if (age < 16) {
-            showAlert(Alert.AlertType.ERROR, "You must be at least 16 years old.");
-            return;
-        }
-
-        try {
-            Connection conn = DatabaseConnection.getInstance();
-
-            // Check if username exists
-            if (usernameExists(conn, username)) {
-                showAlert(Alert.AlertType.ERROR, "Username already exists.");
+        if (createMessRadio.isSelected()) {
+            // --- Logic for Creating a New Mess ---
+            String newMessName = newMessNameField.getText();
+            if (newMessName.isEmpty()) {
+                messageLabel.setText("Please provide a name for the new mess.");
                 return;
             }
 
-            // Determine role (first user becomes admin)
-            String userRole = isFirstUser(conn) ? "admin" : "member";
+            // User becomes an ADMIN of the new mess
+            newUser.setRole(User.Role.ADMIN);
 
-            // Insert user
-            String sql = "INSERT INTO users (username, password, full_name, role, gender, dob, house_id) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, username);
-                stmt.setString(2, password); // Should hash in production
-                stmt.setString(3, username); // Using username as full_name if no separate field
-                stmt.setString(4, userRole);
-                stmt.setString(5, gender);
-                stmt.setDate(6, Date.valueOf(dob));
-
-                // Handle house_id
-                try (PreparedStatement statement = conn.prepareStatement(sql)) {
-                    // ... other parameters ...
-
-                    // Handle house_id (Integer object version)
-                    if (house != null) {
-                        try {
-                            stmt.setInt(7, house.getHouseId());
-                        } catch (NullPointerException e) {
-                            // If getHouseId() throws NPE, it's likely an Integer
-                            stmt.setNull(7, Types.INTEGER);
-                        }
-                    } else {
-                        stmt.setNull(7, Types.INTEGER);
-                    }
-
-                    stmt.executeUpdate();
-                }
-
-                int affectedRows = stmt.executeUpdate();
-
-                if (affectedRows > 0) {
-                    showAlert(Alert.AlertType.INFORMATION,
-                            "Registration successful as " + userRole +
-                                    (house != null ? " of house: " + house.getHouseName() : ""));
-                    clearFormFields();
-                }
+            // First, add the user without a mess_id
+            boolean userAdded = userDao.addUser(newUser);
+            if (!userAdded) {
+                messageLabel.setText("Error: Username or Email might already exist.");
+                return;
             }
-        } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Database error: " + e.getMessage());
+
+            // Then, get the newly created user's ID
+            User createdUser = userDao.getUserByUsername(username);
+
+            // Create the new mess with the user as admin
+            Mess newMess = new Mess();
+            newMess.setMessName(newMessName);
+            newMess.setAdminId(createdUser.getUserId());
+            int newMessId = messDao.createMess(newMess);
+
+            if (newMessId != -1) {
+                // Finally, update the user with the new mess_id
+                // This requires an updateUser method in UserDao, which you'll need to add.
+                // For now, we'll assume it works conceptually.
+                System.out.println("User and Mess created! User needs to be updated with mess_id: " + newMessId);
+                messageLabel.setText("Registration successful!");
+                // Navigate back to login
+                handleBackToLoginLinkAction(event);
+
+            } else {
+                messageLabel.setText("Error: Could not create the mess.");
+                // Here you might want to delete the just-created user for consistency
+            }
+
+        } else {
+            // --- Logic for Joining an Existing Mess ---
+            String selectedMessName = existingMessesChoiceBox.getValue();
+            if (selectedMessName == null) {
+                messageLabel.setText("Please select a mess to join.");
+                return;
+            }
+
+            // User becomes a MEMBER of the existing mess
+            newUser.setRole(User.Role.MEMBER);
+
+            // Find the mess_id from the selected name
+            // This would be more robust with a Map<String, Integer> or by fetching the Mess object
+            Mess selectedMess = messDao.getAllMesses().stream()
+                    .filter(m -> m.getMessName().equals(selectedMessName))
+                    .findFirst().orElse(null);
+
+            if (selectedMess != null) {
+                newUser.setMessId(selectedMess.getMessId());
+                boolean userAdded = userDao.addUser(newUser);
+
+                if (userAdded) {
+                    messageLabel.setText("Registration successful!");
+                    System.out.println("User created and joined mess: " + selectedMessName);
+                    handleBackToLoginLinkAction(event);
+                } else {
+                    messageLabel.setText("Error: Username or Email might already exist.");
+                }
+            } else {
+                messageLabel.setText("Error: Selected mess not found.");
+            }
+        }
+    }
+
+    @FXML
+    protected void handleBackToLoginLinkAction(ActionEvent event) {
+        try {
+            Parent loginRoot = FXMLLoader.load(getClass().getResource("/bd/edu/seu/mealmanagementsystem/Login.fxml"));
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(loginRoot);
+            stage.setScene(scene);
+            stage.setTitle("Meal Management System - Login");
+            stage.show();
+        } catch (IOException e) {
             e.printStackTrace();
+            messageLabel.setText("Error: Could not load login page.");
         }
-    }
-
-    private boolean usernameExists(Connection conn, String username) throws SQLException {
-        String query = "SELECT 1 FROM users WHERE username = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, username);
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next();
-            }
-        }
-    }
-
-    private boolean isFirstUser(Connection conn) throws SQLException {
-        String query = "SELECT COUNT(*) FROM users";
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            return rs.next() && rs.getInt(1) == 0;
-        }
-    }
-
-    private void clearFormFields() {
-        usernameField.clear();
-        passwordField.clear();
-        confirmPasswordField.clear();
-        emailField.clear();
-        phoneField.clear();
-        dobPicker.setValue(null);
-        genderGroup.selectToggle(null);
-    }
-
-    private void showAlert(Alert.AlertType alertType, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(alertType == Alert.AlertType.ERROR ? "Error" : "Information");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

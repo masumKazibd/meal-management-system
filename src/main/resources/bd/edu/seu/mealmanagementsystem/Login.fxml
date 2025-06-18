@@ -1,14 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="bd.edu.seu.mealmanagementsystem.Login"
-            prefHeight="400.0" prefWidth="600.0" >
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-</AnchorPane>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+           minWidth="-Infinity" prefHeight="500.0" prefWidth="450.0"
+           xmlns="http://javafx.com/javafx/8.0.171"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="bd.edu.seu.mealmanagementsystem.controller.LoginController">
+    <children>
+        <ImageView fitHeight="500.0" fitWidth="450.0" pickOnBounds="true">
+                <image>
+                    <Image url="@../../../../Images/back.jpg" />
+                </image>
+        </ImageView>
+        <VBox alignment="CENTER" maxHeight="350.0" maxWidth="300.0" spacing="15.0" style="-fx-background-color: rgba(255, 255, 255, 0.85); -fx-background-radius: 15;">
+            <children>
+                <Label text="Member Login">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="usernameField" maxWidth="200.0" promptText="Username" />
+                <PasswordField fx:id="passwordField" maxWidth="200.0" promptText="Password" />
+                <Button fx:id="loginButton" mnemonicParsing="false" onAction="#handleLoginButtonAction" prefWidth="100.0" text="Login" />
+                <Label fx:id="errorMessageLabel" textFill="RED" />
+                <Hyperlink onAction="#handleRegisterLinkAction" text="Don't have an account? Register" />
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </children>
+</StackPane>

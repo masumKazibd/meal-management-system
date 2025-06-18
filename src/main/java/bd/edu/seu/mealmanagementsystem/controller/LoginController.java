@@ -14,6 +14,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+
 import java.io.IOException;
 
 public class LoginController {
@@ -46,25 +47,36 @@ public class LoginController {
             return;
         }
 
-        // In a real application, you'd use a password hashing library like BCrypt.
-        // For this project, we'll do a direct comparison.
         User user = userDao.getUserByUsername(username);
 
         if (user != null && user.getPassword().equals(password)) {
-            // Login successful
-            errorMessageLabel.setText("Login successful!");
-            // TODO: Navigate to the main application dashboard
-            // For now, we'll just close the login window.
+            try {
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Get the stage from the event source
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close(); // Close the login window
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/bd/edu/seu/mealmanagementsystem/Dashboard.fxml"));
+                Parent dashboardRoot = loader.load();
 
-            // Here you would typically load the main dashboard
-            System.out.println("User " + user.getUsername() + " logged in successfully as " + user.getRole());
+                // Get the controller instance from the loader
+                DashboardController dashboardController = loader.getController();
 
+                // Call a method on the dashboard controller to pass the logged-in user's data
+                dashboardController.initData(user);
+
+                // Create a new scene with the dashboard view
+                Scene scene = new Scene(dashboardRoot);
+
+                // Set the new scene on the stage and show it
+                stage.setScene(scene);
+                stage.setTitle("Meal Management Dashboard");
+                stage.centerOnScreen();
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                errorMessageLabel.setText("Error: Failed to load the dashboard.");
+            }
         } else {
-            // Login failed
+            // --- LOGIN FAILED ---
             errorMessageLabel.setText("Invalid username or password.");
         }
     }
@@ -72,8 +84,8 @@ public class LoginController {
     @FXML
     protected void handleRegisterLinkAction(ActionEvent event) {
         try {
-            // Load the registration screen
-            Parent registerRoot = FXMLLoader.load(getClass().getResource("Register.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/bd/edu/seu/mealmanagementsystem/register.fxml"));
+            Parent registerRoot = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(registerRoot);
             stage.setScene(scene);
@@ -84,4 +96,5 @@ public class LoginController {
             errorMessageLabel.setText("Error: Could not load registration page.");
         }
     }
+
 }

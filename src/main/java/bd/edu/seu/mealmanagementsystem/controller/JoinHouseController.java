@@ -18,7 +18,7 @@ public class JoinHouseController {
     @FXML
     public void initialize() {
         try {
-            Connection conn = DatabaseConnection.getInstance();
+            Connection conn = DatabaseConnection.getConnection();
             ResultSet rs = conn.createStatement().executeQuery("SELECT house_id, house_name, gender_type FROM houses");
             while (rs.next()) {
                 House house = new House(
