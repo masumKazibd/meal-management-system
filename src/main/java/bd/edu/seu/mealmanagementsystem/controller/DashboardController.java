@@ -107,6 +107,8 @@ public class DashboardController {
                 ((DashboardHomeController) controller).initData(currentUser);
             } else if (controller instanceof MealPlanController) {
                 ((MealPlanController) controller).initData(currentUser);
+            }else if (controller instanceof MealAttendanceController) {
+                ((MealAttendanceController) controller).initData(currentUser);
             }
 
             contentArea.getChildren().setAll(view);

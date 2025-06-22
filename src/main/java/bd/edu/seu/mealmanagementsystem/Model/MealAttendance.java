@@ -7,6 +7,11 @@ public class MealAttendance {
     private boolean isPresent;
 
     public MealAttendance() {}
+    public MealAttendance(int mealId, int userId, boolean isPresent) {
+        this.mealId = mealId;
+        this.userId = userId;
+        this.isPresent = isPresent;
+    }
 
     public int getAttendanceId() { return attendanceId; }
     public void setAttendanceId(int attendanceId) { this.attendanceId = attendanceId; }

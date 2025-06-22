@@ -11,7 +11,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="700.0" spacing="25.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="TOP_CENTER" prefHeight="550.0"
+      prefWidth="700.0" spacing="25.0"
+      style="-fx-background-color: transparent;"
+      xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="bd.edu.seu.mealmanagementsystem.controller.MealAttendanceController">
     <padding>
         <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
     </padding>
@@ -40,7 +45,7 @@
         <HBox alignment="CENTER" spacing="40.0">
             <children>
                 <!-- Breakfast Card -->
-                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
+                <VBox fx:id="breakfastCard" alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
                     <effect>
                         <DropShadow color="#00000026" height="20.0" radius="9.5" width="20.0" />
                     </effect>
@@ -57,7 +62,7 @@
                     </children>
                 </VBox>
                 <!-- Lunch Card -->
-                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
+                <VBox fx:id="lunchCard" alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
                     <effect>
                         <DropShadow color="#00000026" height="20.0" radius="9.5" width="20.0" />
                     </effect>
@@ -74,7 +79,7 @@
                     </children>
                 </VBox>
                 <!-- Dinner Card -->
-                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
+                <VBox fx:id="dinnerCard" alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
                     <effect>
                         <DropShadow color="#00000026" height="20.0" radius="9.5" width="20.0" />
                     </effect>
@@ -92,7 +97,7 @@
                 </VBox>
             </children>
         </HBox>
-        <Button fx:id="saveAttendanceButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Save My Choices" />
+        <Button fx:id="saveAttendanceButton" onAction="#handleSaveAttendanceButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Save My Choices" />
         <Label fx:id="messageLabel" />
     </children>
 </VBox>
