@@ -2,12 +2,11 @@ module bd.edu.seu.mealmanagementsystem {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires java.desktop;
-
-
-    opens bd.edu.seu.mealmanagementsystem to javafx.fxml;
-    exports bd.edu.seu.mealmanagementsystem;
+    requires mysql.connector.j;
 
     opens bd.edu.seu.mealmanagementsystem.controller to javafx.fxml;
-    exports bd.edu.seu.mealmanagementsystem.controller;
+
+    opens bd.edu.seu.mealmanagementsystem.Model to javafx.base;
+
+    exports bd.edu.seu.mealmanagementsystem;
 }

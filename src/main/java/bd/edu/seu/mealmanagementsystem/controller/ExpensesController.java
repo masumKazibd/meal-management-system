@@ -48,6 +48,8 @@ public class ExpensesController {
     }
 
     public void initData(User user) {
+        System.out.println("initData called with user: " + user);
+
         this.currentUser = user;
         loadMonthlyExpenses();
     }
