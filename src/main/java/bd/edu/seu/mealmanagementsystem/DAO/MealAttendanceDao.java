@@ -2,6 +2,7 @@ package bd.edu.seu.mealmanagementsystem.DAO;
 
 import bd.edu.seu.mealmanagementsystem.Model.MealAttendance;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,4 +62,30 @@ public class MealAttendanceDao {
         }
         return attendances;
     }
+    public BigDecimal getTotalMealCostForUser(int userId, int year, int month) {
+    String sql = "SELECT SUM(m.cost_per_meal) AS total_cost " +
+            "FROM meal_attendance ma " +
+            "JOIN meals m ON ma.meal_id = m.meal_id " +
+            "WHERE ma.user_id = ? AND ma.is_present = TRUE " +
+            "AND YEAR(m.meal_date) = ? AND MONTH(m.meal_date) = ?";
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+        pstmt.setInt(1, userId);
+        pstmt.setInt(2, year);
+        pstmt.setInt(3, month);
+
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            BigDecimal totalCost = rs.getBigDecimal("total_cost");
+            // If the user took no meals, the SUM will be NULL. In that case, return 0.
+            return totalCost == null ? BigDecimal.ZERO : totalCost;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    // Return 0 if there was an error or no records were found.
+    return BigDecimal.ZERO;
+}
 }
