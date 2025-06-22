@@ -110,30 +110,28 @@ public class RegisterController {
             int newMessId = messDao.createMess(newMess);
 
             if (newMessId != -1) {
-                // Finally, update the user with the new mess_id
-                // This requires an updateUser method in UserDao, which you'll need to add.
-                // For now, we'll assume it works conceptually.
-                System.out.println("User and Mess created! User needs to be updated with mess_id: " + newMessId);
-                messageLabel.setText("Registration successful!");
-                handleBackToLoginLinkAction(event);
+                boolean messIdUpdated = userDao.updateUserMessId(createdUser.getUserId(), newMessId);
+
+                if (messIdUpdated) {
+                    messageLabel.setText("Registration successful!");
+                    handleBackToLoginLinkAction(event);
+                } else {
+                    messageLabel.setText("Error: Account created, but failed to link to mess.");
+                }
 
             } else {
                 messageLabel.setText("Error: Could not create the mess.");
             }
 
         } else {
-            // --- Logic for Joining an Existing Mess ---
             String selectedMessName = existingMessesChoiceBox.getValue();
             if (selectedMessName == null) {
                 messageLabel.setText("Please select a mess to join.");
                 return;
             }
 
-            // User becomes a MEMBER of the existing mess
             newUser.setRole(User.Role.MEMBER);
 
-            // Find the mess_id from the selected name
-            // This would be more robust with a Map<String, Integer> or by fetching the Mess object
             Mess selectedMess = messDao.getAllMesses().stream()
                     .filter(m -> m.getMessName().equals(selectedMessName))
                     .findFirst().orElse(null);
