@@ -41,13 +41,11 @@ public class PaymentsController {
     private PaymentDao paymentDao;
 
     public void initialize() {
-        // DAOs
         this.userDao = new UserDao();
         this.expenseDao = new ExpenseDao();
         this.mealAttendanceDao = new MealAttendanceDao();
         this.paymentDao = new PaymentDao();
 
-        // Table Columns
         memberNameColumn.setCellValueFactory(new PropertyValueFactory<>("memberName"));
         totalDueColumn.setCellValueFactory(new PropertyValueFactory<>("totalDue"));
         amountPaidColumn.setCellValueFactory(new PropertyValueFactory<>("amountPaid"));
@@ -67,47 +65,42 @@ public class PaymentsController {
 
         List<User> members = userDao.getUsersByMessId(currentUser.getMessId());
         if (members.isEmpty()) {
-            System.out.println("No members found in this mess."); // Debug
+            System.out.println("DEBUG: No members found in this mess. Table will be empty.");
             return;
         }
 
         // --- Start of Main Debug Section ---
         System.out.println("\n--- Calculating Payment Summaries for " + members.size() + " Members ---");
 
-        // Calculate total shared expenses for the month
         List<Expense> monthlyExpenses = expenseDao.getExpensesForMonth(currentUser.getMessId(), today.getYear(), today.getMonthValue());
         BigDecimal totalSharedExpenses = monthlyExpenses.stream()
                 .map(Expense::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        System.out.println("Total Shared Expenses for Month: " + totalSharedExpenses); // Debug
+        System.out.println("DEBUG: Total Shared Expenses for Month: " + totalSharedExpenses);
 
-        // Calculate each member's share of the expenses
         BigDecimal perPersonExpenseShare = totalSharedExpenses.divide(new BigDecimal(members.size()), 2, RoundingMode.HALF_UP);
-        System.out.println("Per Person Expense Share: " + perPersonExpenseShare); // Debug
+        System.out.println("DEBUG: Per Person Expense Share: " + perPersonExpenseShare);
 
         List<PaymentSummary> summaries = new ArrayList<>();
         for (User member : members) {
-            System.out.println("\nProcessing member: " + member.getFullName()); // Debug
+            System.out.println("\nDEBUG: Processing member: " + member.getFullName());
 
-            // Calculate this member's total meal cost
             BigDecimal userMealCost = mealAttendanceDao.getTotalMealCostForUser(member.getUserId(), today.getYear(), today.getMonthValue());
-            System.out.println("...Meal Cost: " + userMealCost); // <-- IMPORTANT DEBUG LINE
+            System.out.println("...DEBUG: Meal Cost = " + userMealCost);
 
-            // Calculate total due
             BigDecimal totalDue = userMealCost.add(perPersonExpenseShare);
-            System.out.println("...Total Due: " + totalDue); // Debug
+            System.out.println("...DEBUG: Total Due = " + totalDue);
 
-            // Get amount paid
             BigDecimal amountPaid = paymentDao.getTotalPaidByUser(member.getUserId(), today.getYear(), today.getMonthValue());
-            System.out.println("...Amount Paid: " + amountPaid); // Debug
+            System.out.println("...DEBUG: Amount Paid = " + amountPaid);
 
-            // Calculate balance
             BigDecimal balance = totalDue.subtract(amountPaid);
-            System.out.println("...Balance: " + balance); // Debug
+            System.out.println("...DEBUG: Balance = " + balance);
 
             summaries.add(new PaymentSummary(member.getFullName(), totalDue, amountPaid, balance));
         }
+        System.out.println("--- Finished Calculations ---");
+        // --- End of Main Debug Section ---
 
-        // --- UPDATE UI ---
         ObservableList<PaymentSummary> observableSummaries = FXCollections.observableArrayList(summaries);
         paymentsTable.setItems(observableSummaries);
 
