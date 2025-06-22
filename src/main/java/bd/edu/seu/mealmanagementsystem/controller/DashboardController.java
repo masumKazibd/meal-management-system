@@ -116,6 +116,8 @@ public class DashboardController {
                 ((ExpensesController) controller).initData(currentUser);
             }else if (controller instanceof AddExpenseController) {
                 ((AddExpenseController) controller).initData(currentUser);
+            }else if (controller instanceof ProfileController) {
+                ((ProfileController) controller).initData(currentUser);
             }
 
             contentArea.getChildren().setAll(view);
