@@ -1,6 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-    <Label text="Meal Attendance View - Content Goes Here" />
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" prefHeight="550.0" prefWidth="700.0" spacing="25.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <padding>
+        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+    </padding>
+    <children>
+        <Label text="Daily Meal Attendance">
+            <font>
+                <Font name="System Bold" size="32.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER" spacing="10.0">
+            <children>
+                <Label text="Select Date:">
+                    <font>
+                        <Font size="16.0" />
+                    </font>
+                </Label>
+                <DatePicker fx:id="attendanceDatePicker" prefWidth="200.0" />
+            </children>
+        </HBox>
+        <Separator maxWidth="600.0" />
+        <Label text="Mark the meals you will be taking for the selected date:">
+            <font>
+                <Font size="14.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER" spacing="40.0">
+            <children>
+                <!-- Breakfast Card -->
+                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
+                    <effect>
+                        <DropShadow color="#00000026" height="20.0" radius="9.5" width="20.0" />
+                    </effect>
+                    <children>
+                        <Label style="-fx-font-size: 48px;" text="🍳" />
+                        <CheckBox fx:id="breakfastCheckbox" mnemonicParsing="false" text="Breakfast">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </CheckBox>
+                    </children>
+                </VBox>
+                <!-- Lunch Card -->
+                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
+                    <effect>
+                        <DropShadow color="#00000026" height="20.0" radius="9.5" width="20.0" />
+                    </effect>
+                    <children>
+                        <Label style="-fx-font-size: 48px;" text="🍛" />
+                        <CheckBox fx:id="lunchCheckbox" mnemonicParsing="false" text="Lunch">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </CheckBox>
+                    </children>
+                </VBox>
+                <!-- Dinner Card -->
+                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;">
+                    <effect>
+                        <DropShadow color="#00000026" height="20.0" radius="9.5" width="20.0" />
+                    </effect>
+                    <children>
+                        <Label style="-fx-font-size: 48px;" text="🍗" />
+                        <CheckBox fx:id="dinnerCheckbox" mnemonicParsing="false" text="Dinner">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="10.0" />
+                            </VBox.margin>
+                        </CheckBox>
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+        <Button fx:id="saveAttendanceButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Save My Choices" />
+        <Label fx:id="messageLabel" />
+    </children>
 </VBox>

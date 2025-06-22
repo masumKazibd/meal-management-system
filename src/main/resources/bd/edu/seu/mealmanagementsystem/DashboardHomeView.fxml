@@ -1,10 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-    <Label text="System Dashboard">
-        <font><Font size="24.0" /></font>
-    </Label>
-    <Label text="Welcome to the Meal Management System. Use the menu on the left to navigate."/>
+
+<VBox alignment="TOP_CENTER"
+      prefHeight="500.0"
+      prefWidth="700.0"
+      spacing="20.0"
+      style="-fx-background-color: transparent;"
+      xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="bd.edu.seu.mealmanagementsystem.controller.DashboardHomeController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+    <children>
+        <Label text="Mess Overview">
+            <font>
+                <Font name="System Bold" size="28.0" />
+            </font>
+        </Label>
+        <FlowPane alignment="CENTER" hgap="30.0" prefWrapLength="600.0" vgap="30.0" VBox.vgrow="ALWAYS">
+            <children>
+                <!-- Stat Card 1: Total Members -->
+                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);">
+                    <children>
+                        <Label text="Total Members">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="totalMembersLabel" text="-" textFill="#007bff">
+                            <font>
+                                <Font name="System Bold" size="36.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <!-- Stat Card 2: Total Expenses This Month -->
+                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);">
+                    <children>
+                        <Label text="Expenses This Month">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="totalExpensesLabel" text="-" textFill="#dc3545">
+                            <font>
+                                <Font name="System Bold" size="36.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <!-- Stat Card 3: Placeholder for future stats -->
+                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="200.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.5, 0, 0);">
+                    <children>
+                        <Label text="Your Total Meals">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="userMealsLabel" text="-" textFill="#28a745">
+                            <font>
+                                <Font name="System Bold" size="36.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+            </children>
+        </FlowPane>
+        <Label fx:id="messNameLabel" style="-fx-font-size: 14px; -fx-text-fill: grey;" text="Mess: -" />
+    </children>
 </VBox>

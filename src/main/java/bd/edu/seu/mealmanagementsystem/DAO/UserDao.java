@@ -6,14 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDao {
 
-    /**
-     * Finds a user by their username.
-     * @param username The username to search for.
-     * @return User object if found, otherwise null.
-     */
     public User getUserByUsername(String username) {
         String sql = "SELECT * FROM users WHERE username = ?";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -39,11 +36,6 @@ public class UserDao {
         return null;
     }
 
-    /**
-     * Adds a new user to the database.
-     * @param user The user object to add.
-     * @return true if the user was added successfully, false otherwise.
-     */
     public boolean addUser(User user) {
         String sql = "INSERT INTO users(username, password, full_name, email, role, mess_id) VALUES(?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
@@ -64,6 +56,31 @@ public class UserDao {
         }
     }
 
-    // Add other methods like updateUser, deleteUser, getUserById etc. as needed
+    public List<User> getUsersByMessId(int messId) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE mess_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, messId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setUsername(rs.getString("username"));
+                user.setPassword(rs.getString("password"));
+                user.setFullName(rs.getString("full_name"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(User.Role.valueOf(rs.getString("role").toUpperCase()));
+                user.setMessId(rs.getInt("mess_id"));
+                users.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
 }
 

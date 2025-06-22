@@ -54,5 +54,26 @@ public class MessDao {
         return messes;
     }
 
-    // Add other methods like getMessById, updateMess etc. as needed
+    public Mess getMessById(int messId) {
+        String sql = "SELECT * FROM messes WHERE mess_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, messId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                Mess mess = new Mess();
+                mess.setMessId(rs.getInt("mess_id"));
+                mess.setMessName(rs.getString("mess_name"));
+                mess.setAdminId(rs.getInt("admin_id"));
+                return mess;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Add other methods like updateMess etc. as needed
 }
