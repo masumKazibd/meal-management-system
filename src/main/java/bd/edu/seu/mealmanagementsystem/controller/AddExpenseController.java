@@ -1,9 +1,8 @@
-
 package bd.edu.seu.mealmanagementsystem.controller;
 
+import bd.edu.seu.mealmanagementsystem.DAO.ExpenseDao;
 import bd.edu.seu.mealmanagementsystem.Model.Expense;
 import bd.edu.seu.mealmanagementsystem.Model.User;
-import bd.edu.seu.mealmanagementsystem.DAO.ExpenseDao;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -26,9 +25,11 @@ public class AddExpenseController {
 
     public void initialize() {
         expenseDao = new ExpenseDao();
+        // Set up the choices for the dropdown
         expenseTypeChoiceBox.setItems(FXCollections.observableArrayList(
-                "Grocery", "Rent", "Electricity", "Utilities", "Other"
+                "Grocery", "Rent", "Electricity", "Water Bill", "Gas Bill", "Internet Bill", "Utilities", "Other"
         ));
+        // Default the date to today
         datePicker.setValue(LocalDate.now());
     }
 
@@ -48,26 +49,24 @@ public class AddExpenseController {
         String amountStr = amountField.getText();
         LocalDate date = datePicker.getValue();
 
-        // --- Validation ---
         if (type == null || amountStr.isEmpty() || date == null) {
             messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Please fill in all fields.");
+            messageLabel.setText("Please fill in all required fields.");
             return;
         }
 
         BigDecimal amount;
         try {
             amount = new BigDecimal(amountStr);
-            if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            if (amount.compareTo(BigDecimal.ZERO) < 0) {
                 throw new NumberFormatException();
             }
         } catch (NumberFormatException e) {
             messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Please enter a valid positive amount.");
+            messageLabel.setText("Please enter a valid positive number for the amount.");
             return;
         }
 
-        // --- Create and Save Expense ---
         Expense newExpense = new Expense();
         newExpense.setMessId(currentUser.getMessId());
         newExpense.setExpenseType(type);
@@ -84,7 +83,7 @@ public class AddExpenseController {
             clearForm();
         } else {
             messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Failed to save the expense.");
+            messageLabel.setText("Failed to save the expense to the database.");
         }
     }
 

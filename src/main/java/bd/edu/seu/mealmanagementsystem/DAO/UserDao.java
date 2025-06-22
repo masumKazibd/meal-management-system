@@ -7,7 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserDao {
 
@@ -81,6 +83,31 @@ public class UserDao {
         }
         return users;
     }
+    public Map<Integer, String> getUserNamesByIds(List<Integer> userIds) {
+        Map<Integer, String> userMap = new HashMap<>();
+        if (userIds == null || userIds.isEmpty()) {
+            return userMap;
+        }
 
+        String placeholders = String.join(",", java.util.Collections.nCopies(userIds.size(), "?"));
+        String sql = String.format("SELECT user_id, full_name FROM users WHERE user_id IN (%s)", placeholders);
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            int index = 1;
+            for (Integer id : userIds) {
+                pstmt.setInt(index++, id);
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                userMap.put(rs.getInt("user_id"), rs.getString("full_name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return userMap;
+    }
 }
 

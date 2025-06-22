@@ -16,7 +16,7 @@ public class ExpenseDao {
             pstmt.setInt(1, expense.getMessId());
             pstmt.setString(2, expense.getExpenseType());
             pstmt.setBigDecimal(3, expense.getAmount());
-            pstmt.setDate(4, Date.valueOf(expense.getExpenseDate()));
+            pstmt.setDate(4, java.sql.Date.valueOf(expense.getExpenseDate()));
             pstmt.setString(5, expense.getDescription());
             pstmt.setInt(6, expense.getAddedBy());
 
@@ -27,13 +27,6 @@ public class ExpenseDao {
         }
     }
 
-    /**
-     * Retrieves all expenses for a given mess in a specific month.
-     * @param messId The ID of the mess.
-     * @param year The year.
-     * @param month The month (1-12).
-     * @return A list of expenses.
-     */
     public List<Expense> getExpensesForMonth(int messId, int year, int month) {
         List<Expense> expenses = new ArrayList<>();
         String sql = "SELECT * FROM expenses WHERE mess_id = ? AND YEAR(expense_date) = ? AND MONTH(expense_date) = ?";

@@ -57,6 +57,9 @@ public class DashboardController {
 
     @FXML
     private void handleExpensesButton(ActionEvent event) {
+        // --- DEBUG LINE ---
+        System.out.println("<<< Monthly Expenses button was clicked! >>>");
+
         loadView(FXML_BASE_PATH + "ExpensesView.fxml");
     }
 
@@ -109,6 +112,10 @@ public class DashboardController {
                 ((MealPlanController) controller).initData(currentUser);
             }else if (controller instanceof MealAttendanceController) {
                 ((MealAttendanceController) controller).initData(currentUser);
+            }else if (controller instanceof ExpensesController) { // <-- ADD THIS BLOCK
+                ((ExpensesController) controller).initData(currentUser);
+            }else if (controller instanceof AddExpenseController) {
+                ((AddExpenseController) controller).initData(currentUser);
             }
 
             contentArea.getChildren().setAll(view);
