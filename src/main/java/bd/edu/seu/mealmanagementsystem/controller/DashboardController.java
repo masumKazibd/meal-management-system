@@ -89,11 +89,6 @@ public class DashboardController {
         }
     }
 
-    /**
-     * Loads a specific FXML view into the main content area using an absolute path.
-     *
-     * @param fxmlPath The absolute path to the FXML file from the resources root.
-     */
     private void loadView(String fxmlPath) {
         try {
             URL resourceUrl = getClass().getResource(fxmlPath);
@@ -105,8 +100,13 @@ public class DashboardController {
             Node view = loader.load();
 
             Object controller = loader.getController();
+
             if (controller instanceof AddExpenseController) {
                 ((AddExpenseController) controller).initData(currentUser);
+            } else if (controller instanceof DashboardHomeController) {
+                ((DashboardHomeController) controller).initData(currentUser);
+            } else if (controller instanceof MealPlanController) {
+                ((MealPlanController) controller).initData(currentUser);
             }
 
             contentArea.getChildren().setAll(view);

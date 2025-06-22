@@ -23,7 +23,7 @@ public class UserDao {
                 User user = new User();
                 user.setUserId(rs.getInt("user_id"));
                 user.setUsername(rs.getString("username"));
-                user.setPassword(rs.getString("password")); // Password should be handled securely
+                user.setPassword(rs.getString("password"));
                 user.setFullName(rs.getString("full_name"));
                 user.setEmail(rs.getString("email"));
                 user.setRole(User.Role.valueOf(rs.getString("role").toUpperCase()));

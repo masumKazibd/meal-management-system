@@ -3,7 +3,7 @@ package bd.edu.seu.mealmanagementsystem.Model;
 public class User {
     private int userId;
     private String username;
-    private String password; // In a real app, this should be hashed
+    private String password;
     private String fullName;
     private String email;
     private Role role;

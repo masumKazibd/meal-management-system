@@ -12,7 +12,6 @@ public class Expense {
     private String description;
     private int addedBy;
 
-    // Constructors, Getters, and Setters
     public Expense() {}
 
     public int getExpenseId() { return expenseId; }

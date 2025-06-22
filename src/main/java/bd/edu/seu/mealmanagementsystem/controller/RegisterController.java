@@ -69,7 +69,7 @@ public class RegisterController {
         String fullName = fullNameField.getText();
         String username = usernameField.getText();
         String email = emailField.getText();
-        String password = passwordField.getText(); // Remember to HASH this in a real app!
+        String password = passwordField.getText();
 
         if (fullName.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Please fill in all user fields.");
@@ -115,12 +115,10 @@ public class RegisterController {
                 // For now, we'll assume it works conceptually.
                 System.out.println("User and Mess created! User needs to be updated with mess_id: " + newMessId);
                 messageLabel.setText("Registration successful!");
-                // Navigate back to login
                 handleBackToLoginLinkAction(event);
 
             } else {
                 messageLabel.setText("Error: Could not create the mess.");
-                // Here you might want to delete the just-created user for consistency
             }
 
         } else {

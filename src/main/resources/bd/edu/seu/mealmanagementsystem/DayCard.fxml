@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" minHeight="220.0"
+      prefWidth="120.0" spacing="8.0"
+      style="-fx-background-color: #FFFFFF;
+      -fx-background-radius: 8;" xmlns="http://javafx.com/javafx/8.0.171"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="bd.edu.seu.mealmanagementsystem.controller.DayCardController">
+    <padding>
+        <Insets bottom="10.0" top="10.0" />
+    </padding>
+    <effect>
+        <DropShadow color="#00000026" height="15.0" radius="7.0" width="15.0" />
+    </effect>
+    <children>
+        <Label fx:id="dayNameLabel" text="Sunday">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <Label fx:id="dateLabel" style="-fx-text-fill: grey;" text="22 Jun" />
+        <Separator prefWidth="200.0" />
+        <VBox alignment="CENTER_LEFT" spacing="5.0">
+            <padding>
+                <Insets left="10.0" right="10.0" />
+            </padding>
+            <children>
+                <Label text="🍳 Breakfast" />
+                <Label fx:id="breakfastLabel" style="-fx-font-style: italic; -fx-text-fill: #555555;" text="-- Not Set --" wrapText="true" />
+                <Separator />
+                <Label text="🍛 Lunch" />
+                <Label fx:id="lunchLabel" style="-fx-font-style: italic; -fx-text-fill: #555555;" text="-- Not Set --" wrapText="true" />
+                <Separator />
+                <Label text="🍗 Dinner" />
+                <Label fx:id="dinnerLabel" style="-fx-font-style: italic; -fx-text-fill: #555555;" text="-- Not Set --" wrapText="true" />
+            </children>
+        </VBox>
+    </children>
+</VBox>

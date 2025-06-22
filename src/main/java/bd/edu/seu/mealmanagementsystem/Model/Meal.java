@@ -15,7 +15,6 @@ class Meal {
         BREAKFAST, LUNCH, DINNER
     }
 
-    // Constructors, Getters, and Setters
     public Meal() {}
 
     public int getMealId() { return mealId; }

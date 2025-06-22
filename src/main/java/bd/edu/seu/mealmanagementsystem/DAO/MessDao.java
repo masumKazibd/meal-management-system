@@ -74,6 +74,4 @@ public class MessDao {
         }
         return null;
     }
-
-    // Add other methods like updateMess etc. as needed
 }
