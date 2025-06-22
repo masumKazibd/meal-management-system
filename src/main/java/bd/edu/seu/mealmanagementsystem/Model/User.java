@@ -13,7 +13,6 @@ public class User {
         ADMIN, MEMBER
     }
 
-
     public User() {}
 
     public int getUserId() { return userId; }

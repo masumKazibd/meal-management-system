@@ -61,7 +61,7 @@
             </content>
         </ScrollPane>
         <Button fx:id="addMealButton" onAction="#handleAddMealButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Add / Edit Meal" visible="false" />
-        <Button fx:id="addMealButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Add / Edit Meal" visible="false" />
+<!--        <Button fx:id="addMealButton" mnemonicParsing="false" prefHeight="40.0" prefWidth="180.0" style="-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;" text="Add / Edit Meal" visible="false" />-->
     </children>
 </VBox>
 
